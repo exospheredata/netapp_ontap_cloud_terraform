@@ -7,6 +7,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Templates](#templates)
+  - [aws_standalone](#aws_standalone)
 - [Contribute](#contribute)
 - [License & Authors](#license-&-authors)
 
@@ -14,6 +15,8 @@
 
 ## Templates
 
+### aws_standalone
+This template will deploy a single NetApp OnCommand Cloud Manager (OCCM) server into the designated AWS subnet.  As part of this process, a new IAM EC2 Role will be created to provide the OCCM server with the correct credentials and access policy.  Upon deploymentment, the OCCM server will create a new ONTAP Cloud for AWS system based on the sizing and design choices in the Terraform variables.
 
 ## Contribute
  - Fork it
