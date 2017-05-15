@@ -4,6 +4,57 @@ provider "aws" {
 }
 
 /*
+Create a new AWS VPC
+*/
+resource "aws_vpc" "occm" {
+  cidr_block       = "10.100.0.0/16"
+  enable_dns_hostnames = true
+  tags {
+    Name = "VPC for ONTAP Cloud",
+    "Deployed Using" = "Terraform",
+    "Designed by" = "www.exospheredata.com"
+  }
+}
+
+resource "aws_subnet" "occm" {
+  vpc_id     = "${aws_vpc.occm.id}"
+  cidr_block = "10.100.1.0/24"
+
+  tags {
+    Name = "Subnet for ONTAP Cloud",
+    "Deployed Using" = "Terraform",
+    "Designed by" = "www.exospheredata.com"
+  }
+}
+
+resource "aws_route_table_association" "main" {
+  subnet_id      = "${aws_subnet.occm.id}"
+  route_table_id = "${aws_vpc.occm.default_route_table_id}"
+  depends_on = [
+    "aws_vpc.occm"
+  ]
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.occm.id}"
+  depends_on = [
+    "aws_vpc.occm"
+  ]
+
+  tags {
+    Name = "IGW for ONTAP Cloud VPC",
+    "Deployed Using" = "Terraform",
+    "Designed by" = "www.exospheredata.com"
+  }
+}
+
+resource "aws_route" "igw" {
+  route_table_id               = "${aws_vpc.occm.default_route_table_id}"
+  destination_cidr_block  = "0.0.0.0/0"
+  gateway_id = "${aws_internet_gateway.gw.id}"
+}
+
+/*
 Create a new IAM Role that can be assigned to the OnCommand Cloud Manager
 EC2 instance and provide access controls to the connected AWS account.
 */
@@ -44,7 +95,7 @@ allow all outgoing traffic.
 resource "aws_security_group" "occm_access" {
   name        = "occm_access"
   description = "Allow all inbound traffic on ports 80, 443, and 22."
-  vpc_id = "${data.aws_subnet.selected.vpc_id}"
+  vpc_id = "${aws_subnet.occm.vpc_id}"
 
   ingress {
     from_port   = 80
@@ -88,7 +139,7 @@ created EC2 Instance Profile.
 resource "aws_instance" "OCCM" {
   ami           							= "${lookup(var.occm_amis, var.region)}"
   instance_type 							= "t2.medium"
-  subnet_id										= "${data.aws_subnet.selected.id}"
+  subnet_id										= "${aws_subnet.occm.id}"
   vpc_security_group_ids 			= ["${aws_security_group.occm_access.id}"]
   key_name										= "${var.key_name}"
   associate_public_ip_address = "true"
@@ -106,10 +157,10 @@ resource "aws_instance" "OCCM" {
     "aws_security_group.occm_access"
   ]
 
-  /*
+
   Establish a connection to the OnCommand Cloud Manager system using
   ssh and the private key file provided.
-  */
+
   connection {
     host = "${aws_instance.OCCM.0.public_ip}"
     type = "ssh"
@@ -145,7 +196,8 @@ resource "null_resource" "ontap_cloud" {
     "aws_iam_role_policy.role_policy",
     "aws_iam_role.occm_ec2_role",
     "aws_iam_role_policy.role_policy",
-    "aws_instance.OCCM"
+    "aws_instance.OCCM",
+    "aws_route.igw"
   ]
 
   /*
