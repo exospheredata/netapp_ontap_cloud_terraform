@@ -1,0 +1,11 @@
+# Berksfile
+#
+# maintainer:: Exosphere Data, LLC
+# maintainer_email:: chef@exospheredata.com
+#
+# Copyright:: 2017, Exosphere Data, LLC, All Rights Reserved.
+#
+
+source 'https://supermarket.chef.io'
+
+cookbook 'netapp_ontap_cloud', git: 'https://github.com/exospheredata/netapp_ontap_cloud.git'
