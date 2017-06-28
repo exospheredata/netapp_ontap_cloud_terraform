@@ -8,7 +8,8 @@
         "name": "${ontap_name}",
         "size": "${ontap_size}",
         "instance_type": "${ontap_instance}",
-        "license_type": "${license_type}"
+        "license_type": "${license_type}",
+        "write_speed": "${write_speed}"
       }
     },
     "aws": {

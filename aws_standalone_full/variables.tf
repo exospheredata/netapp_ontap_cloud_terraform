@@ -1,5 +1,8 @@
-variable "aws_profile" {
-  description = "The aws credentials file profile name."
+/*
+Mandatory Variables
+*/
+variable "owner_name" {
+  description = "Your Username to identify your infrastructure"
 }
 
 variable "key_name" {
@@ -10,62 +13,96 @@ variable "key_file_path" {
   description = "Location of the local private key file for the EC2 instance."
 }
 
-variable "region" {
-  description = "AWS region to which the systems will be deployed."
+variable "converge" {
+  description = "When set to 'true', the configuration resources will all re-apply to their hosts."
+  default     = "false"
+}
+/*
+AWS specific
+*/
+variable "aws_profile" {
+  description = "The aws credentials file profile name."
+  default     = "default"
 }
 
+variable "region" {
+  description = "AWS region to which the systems will be deployed."
+  default     = "us-east-1"
+}
+
+variable "vpc_cidr" {
+  description = "Base Network CIDR for the new VPC"
+  default     = "10.100.0.0/16"
+}
+
+/*
+OnCommand Cloud Manager specific
+*/
 variable "occm_email" {
   description = "Email address (username) for OnCommand Cloud Manager instance"
+  default     = "netapp@peritus.lab"
 }
 
 variable "occm_password" {
   description = "Administrative password for OnCommand Cloud Manager instance"
+  default     = "peritus"
 }
 
 variable "company_name" {
   description = "Your company name to which the OnCommand Cloud manager system will be registered"
+  default     = "Peritus Lab"
 }
 
 variable "occm_amis" {
   type = "map"
   description = "List of the OnCommand Cloud Manager AMIs per region."
   default = {
-    "ap-south-1"     = "ami-08443567"
-    "eu-west-2"      = "ami-6f73660b"
-    "eu-west-1"      = "ami-8dd7f2eb"
-    "ap-northeast-2" = "ami-1e61b070"
-    "ap-northeast-1" = "ami-21abeb46"
-    "sa-east-1"      = "ami-b0c3a7dc"
-    "ca-central-1"   = "ami-f8b8059c"
-    "ap-southeast-1" = "ami-432e9a20"
-    "ap-southeast-2" = "ami-d8aaacbb"
-    "eu-central-1"   = "ami-b7c20ad8"
-    "us-east-1"      = "ami-6c65a27a"
-    "us-east-2"      = "ami-4811342d"
-    "us-west-1"      = "ami-e63a6686"
-    "us-west-2"      = "ami-68e96c08"
+    "ap-south-1"     = "ami-c2bdc2ad"
+    "eu-west-2"      = "ami-fba8bf9f"
+    "eu-west-1"      = "ami-bf9986d9"
+    "ap-northeast-2" = "ami-2e8d5240"
+    "ap-northeast-1" = "ami-8e979ee9"
+    "sa-east-1"      = "ami-982843f4"
+    "ca-central-1"   = "ami-38e9565c"
+    "ap-southeast-1" = "ami-b89c1edb"
+    "ap-southeast-2" = "ami-cb3322a8"
+    "eu-central-1"   = "ami-975bfff8"
+    "us-east-1"      = "ami-392c0a2f"
+    "us-east-2"      = "ami-98a98ffd"
+    "us-west-1"      = "ami-379ebc57"
+    "us-west-2"      = "ami-0258537b"
   }
 }
 
+/*
+ONTAP Cloud specific
+*/
 variable "ontap_name" {
   description = "New ONTAP Cloud Name"
+  default     = "demolab"
 }
 
 variable "ontap_password" {
   description = "New ONTAP Cloud password for Admin"
+  default     = "netapp123"
 }
 
 variable "ontap_size" {
   description = "Size of the Aggregate: Pick One - 100GB, 500GB, 1TB, 2TB, 4TB, 8TB"
-  default = "1TB"
+  default     = "500GB"
 }
 
 variable "ontap_instance" {
   description = "AWS Instance type for ONTAP Cloud instance. If not set, the default is 'm4.xlarge'.  Note: must be a supported size for the selected license type"
-  default = "m4.xlarge"
+  default     = "m4.xlarge"
 }
 
 variable "license_type" {
   description = "ONTAP Cloud license type.  Supported values are [cot-explore-paygo, cot-standard-paygo, cot-premium-paygo]. Default value is cot-explore-paygo"
-  default = "cot-explore-paygo"
+  default     = "cot-explore-paygo"
+}
+
+variable "ontap_write_speed" {
+  description = "Sets the ONTAP Cloud write speed.  'Normal' is standard with high consistency guarantee, while 'high' will increase write performance at the risk of potential data loss in the event of a failure."
+  default = "normal"
 }
