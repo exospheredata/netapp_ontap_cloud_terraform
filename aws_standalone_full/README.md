@@ -1,7 +1,7 @@
 # Terraform Template for ONTAP Cloud for AWS standalone instance with OnCommand Cloud Manager and Single-Subnet VPC
 ### _Manages the deployment of NetApp OnCommand Cloud Manager and ONTAP Cloud_
 
-This Terraform template will deploy a NetApp OnCommand Cloud Manager environment into the chosen AWS region and create a new single-subnet VPC.  As part of the process, a new ONTAP Cloud system will be deployed with a 1TB aggregate using an ONTAP Cloud Explore system.  The solution leverages the [ONTAP Cloud CHEF Cookbook](github.com/exospheredata/netapp_ontap_cloud) to provision and configure the environment.
+This Terraform template will deploy a NetApp OnCommand Cloud Manager environment into the chosen AWS region and create a new single-subnet VPC.  As part of the process, a new ONTAP Cloud system will be deployed with a 1TB aggregate using an ONTAP Cloud Explore system.  The solution leverages the [ONTAP Cloud CHEF Cookbook](https://github.com/exospheredata/netapp_ontap_cloud) to provision and configure the environment.
 
 _Note: On `terraform destroy`, the associated ONTAP Cloud system deployed will be destroyed and removed from your cloud account_
 

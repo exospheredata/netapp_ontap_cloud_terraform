@@ -39,17 +39,14 @@ OnCommand Cloud Manager specific
 */
 variable "occm_email" {
   description = "Email address (username) for OnCommand Cloud Manager instance"
-  default     = "netapp@peritus.lab"
 }
 
 variable "occm_password" {
   description = "Administrative password for OnCommand Cloud Manager instance"
-  default     = "peritus"
 }
 
 variable "company_name" {
   description = "Your company name to which the OnCommand Cloud manager system will be registered"
-  default     = "Peritus Lab"
 }
 
 variable "occm_amis" {
